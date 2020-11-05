@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   root 'search#index'
 
   resources :search do
-    collection { post :upload_file }
+    collection do
+      post :upload_file
+      post :search_by_tocken
+    end
   end
 end
