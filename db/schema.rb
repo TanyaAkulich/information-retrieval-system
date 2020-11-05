@@ -15,17 +15,20 @@ ActiveRecord::Schema.define(version: 2020_11_02_181938) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "files", force: :cascade do |t|
-    t.string "name", null: false
-  end
-
   create_table "tokens", force: :cascade do |t|
     t.string "name", null: false
     t.integer "count", null: false
     t.decimal "rate", default: "0.0", null: false
-    t.bigint "file_id"
-    t.index ["file_id"], name: "index_tokens_on_file_id"
+    t.bigint "uploaded_file_id"
+    t.index ["uploaded_file_id"], name: "index_tokens_on_uploaded_file_id"
   end
 
-  add_foreign_key "tokens", "files"
+  create_table "uploaded_files", force: :cascade do |t|
+    t.string "file_file_name"
+    t.string "file_content_type"
+    t.bigint "file_file_size"
+    t.datetime "file_updated_at"
+  end
+
+  add_foreign_key "tokens", "uploaded_files"
 end

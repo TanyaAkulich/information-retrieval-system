@@ -5,7 +5,7 @@ class CreateToken < ActiveRecord::Migration[5.2]
       t.integer :count, null: false
       t.decimal :rate, null: false, default: 0
 
-      t.references :file, foreign_key: true
+      t.references :uploaded_file, foreign_key: true
     end
   end
 end
