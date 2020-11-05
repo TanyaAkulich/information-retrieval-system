@@ -6,6 +6,6 @@ class SearchController < ApplicationController
   end
 
   def search_by_tocken
-    binding.pry
+    Tokens::InitTokenService.build(params[:tocken]).call
   end
 end

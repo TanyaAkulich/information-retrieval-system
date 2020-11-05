@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2020_11_02_181938) do
   create_table "tokens", force: :cascade do |t|
     t.string "name", null: false
     t.decimal "weight", default: "0.0", null: false
+    t.decimal "term_inverse_frequency", default: "0.0", null: false
     t.bigint "uploaded_file_id"
     t.index ["uploaded_file_id"], name: "index_tokens_on_uploaded_file_id"
   end
