@@ -14,9 +14,7 @@ class SearchService
       hash[file_id] = similarity_measure(file_id)
     end
 
-    sorted_ids = Hash[result.sort_by { |key, value| -value }].keys
-
-    UploadedFile.where(id: sorted_ids)
+    Hash[result.sort_by { |key, value| -value }]
   end
 
   private

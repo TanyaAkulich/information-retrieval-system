@@ -1,0 +1,16 @@
+h1 Token
+  <label>#{@tocken}</label>
+
+
+table
+  thead
+    tr
+      th File Path
+      th Similarity Measure
+  tbody
+    - @top_search.each do |result|
+      tr
+        td
+          a href="file:#{UploadedFile.find(result[0]).file.path}"
+            = UploadedFile.find(result[0]).file.path
+        td = result[1]

@@ -7,7 +7,7 @@ class UploadedFile < ApplicationRecord
 
   def recalculate_all_tokens
     Token.uniq_names.each do |token|
-      parameters = token.update(ParamsService.build(token).call)
+      parameters = token.create_or_update(ParamsService.build(token).call)
 
       parameters.each { |parameter| Token.find_by(uploaded_file_id: parameter[:uploaded_file_id]).update(parameter) }
     end

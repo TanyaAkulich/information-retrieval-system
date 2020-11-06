@@ -6,7 +6,8 @@ class SearchController < ApplicationController
   end
 
   def search_by_tocken
-    Tokens::InitTokenService.build(params[:tocken]).call
-    @top_search = SearchService.build(params[:tocken]).call
+    @tocken = params[:tocken]
+    Tokens::InitTokenService.build(@tocken).call
+    @top_search = SearchService.build(@tocken).call
   end
 end
