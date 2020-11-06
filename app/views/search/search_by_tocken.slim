@@ -12,5 +12,5 @@ table
       tr
         td
           a href="file:#{UploadedFile.find(result[0]).file.path}"
-            = UploadedFile.find(result[0]).file.path
+            = UploadedFile.find(result[0]).file_name
         td = result[1]

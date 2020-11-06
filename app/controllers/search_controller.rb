@@ -2,7 +2,10 @@ class SearchController < ApplicationController
   def index; end
 
   def upload_file
-    UploadedFile.create(file: params.require(:upload)[:datafile].tempfile)
+    UploadedFile.create(
+      file: params.require(:upload)[:datafile].tempfile,
+      file_name: params.require(:upload)[:datafile].original_filename
+    )
   end
 
   def search_by_tocken

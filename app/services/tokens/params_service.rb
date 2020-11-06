@@ -11,10 +11,11 @@ module Tokens
 
     def call
       UploadedFile.all.map do |file|
+        weight = weight_in_file(file)
         {
           uploaded_file_id: file.id,
-          weight: weight_in_file(file),
-          name: @token.name,
+          weight: weight.to_f.nan? ? 0 : weight,
+          name: @token,
           term_inverse_frequency: term_inverse_frequency
         }
       end
@@ -23,21 +24,21 @@ module Tokens
     private
 
     def term_inverse_frequency
-      UploadedFile.count / number_of_repeats_in_files.to_f
+      number_of_repeats_in_files.zero? ? 0 : UploadedFile.count / number_of_repeats_in_files.to_f
     end
 
     def number_of_repeats_in_files
       return @number_of_repeats_in_files unless @number_of_repeats_in_files.zero?
 
       UploadedFile.all.each do |file|
-        @number_of_repeats_in_files += 1 if File.read(file.file.path).downcase.match(@token.name.downcase)
+        @number_of_repeats_in_files += 1 if File.read(file.file.path).downcase.match(@token.downcase)
       end
 
       @number_of_repeats_in_files
     end
 
     def weight_in_file(file)
-      repats_in_file = File.read(file.file.path).downcase.scan(Regexp.new(@token.name.downcase + '\b'))&.size || 0
+      repats_in_file = File.read(file.file.path).downcase.scan(Regexp.new(@token.downcase + '\b'))&.size || 0
 
       return repats_in_file if ::Token.count.zero?
 

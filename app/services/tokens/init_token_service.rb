@@ -18,7 +18,7 @@ module Tokens
     private
 
     def params
-      ParamsService.build(@token).call
+      ParamsService.build(@token.name).call
     end
   end
 end

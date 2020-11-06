@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2020_11_02_181938) do
   end
 
   create_table "uploaded_files", force: :cascade do |t|
+    t.string "file_name", null: false
     t.string "file_file_name"
     t.string "file_content_type"
     t.bigint "file_file_size"

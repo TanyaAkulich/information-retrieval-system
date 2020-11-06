@@ -3,13 +3,14 @@ class UploadedFile < ApplicationRecord
 
   validates_attachment_content_type :file, content_type: %w[text/plain text/html text/xml]
 
-  after_create :recalculate_all_tokens
+  after_commit :recalculate_all_tokens
 
   def recalculate_all_tokens
     Token.uniq_names.each do |token|
-      parameters = token.create_or_update(ParamsService.build(token).call)
-
-      parameters.each { |parameter| Token.find_by(uploaded_file_id: parameter[:uploaded_file_id]).update(parameter) }
+      params = Tokens::ParamsService.build(token).call
+      params.each do |param|
+        Token.find_or_initialize_by(uploaded_file_id: param[:uploaded_file_id]).update(param)
+      end
     end
   end
 end
