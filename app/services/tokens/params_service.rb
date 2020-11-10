@@ -6,7 +6,7 @@ module Tokens
 
     def initialize(token)
       @token = token
-      @number_of_repeats_in_files = 0
+      @number_of_repeats_in_files = 1
     end
 
     def call
@@ -14,7 +14,7 @@ module Tokens
         weight = weight_in_file(file)
         {
           uploaded_file_id: file.id,
-          weight: weight.to_f.nan? ? 0 : weight,
+          weight: weight,
           name: @token,
           term_inverse_frequency: term_inverse_frequency
         }
@@ -24,11 +24,11 @@ module Tokens
     private
 
     def term_inverse_frequency
-      number_of_repeats_in_files.zero? ? 0 : UploadedFile.count / number_of_repeats_in_files.to_f
+      @term_inverse_frequency ||= Math.log(UploadedFile.count / number_of_repeats_in_files.to_f)
     end
 
     def number_of_repeats_in_files
-      return @number_of_repeats_in_files unless @number_of_repeats_in_files.zero?
+      return @number_of_repeats_in_files unless @number_of_repeats_in_files == 1
 
       UploadedFile.all.each do |file|
         @number_of_repeats_in_files += 1 if File.read(file.file.path).downcase.match(@token.downcase)
@@ -42,7 +42,7 @@ module Tokens
 
       return repats_in_file if ::Token.count.zero?
 
-      ((repats_in_file * Math.log(term_inverse_frequency)) / Math.sqrt(::Token.where(uploaded_file_id: file.id).pluck(:term_inverse_frequency).map { |t| t * t }.sum + term_inverse_frequency).to_f)
+      ((repats_in_file * term_inverse_frequency) / Math.sqrt(::Token.where(uploaded_file_id: file.id).pluck(:term_inverse_frequency).map { |t| t * t }.sum + term_inverse_frequency * term_inverse_frequency).to_f)
     end
   end
 end

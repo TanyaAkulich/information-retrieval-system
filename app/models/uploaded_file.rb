@@ -9,7 +9,7 @@ class UploadedFile < ApplicationRecord
     Token.uniq_names.each do |token|
       params = Tokens::ParamsService.build(token).call
       params.each do |param|
-        Token.find_or_initialize_by(uploaded_file_id: param[:uploaded_file_id]).update(param)
+        Token.find_or_create_by(uploaded_file_id: param[:uploaded_file_id], name: token).update(param)
       end
     end
   end

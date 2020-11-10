@@ -10,6 +10,6 @@ class InitQueryService
   end
 
   def call
-    Vector.elements(Token.uniq_names.map { |t| Token.find_by(name: t).name.downcase.include?(@token_name.downcase) ? 1 : 0 })
+    Vector.elements(Token.uniq_names.sort { |a, b| a <=> b }.map { |t| t.downcase.include?(@token_name.downcase) ? 1 : 0 })
   end
 end

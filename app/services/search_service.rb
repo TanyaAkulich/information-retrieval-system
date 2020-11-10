@@ -14,7 +14,7 @@ class SearchService
       hash[file_id] = similarity_measure(file_id)
     end
 
-    Hash[result.sort_by { |key, value| -value }]
+    Hash[result.sort_by { |key, value| -value.abs }]
   end
 
   private
@@ -24,7 +24,7 @@ class SearchService
   end
 
   def document_vector(file_id)
-    Vector.elements(Token.where(uploaded_file_id: file_id).pluck(:weight))
+    Vector.elements(Token.where(uploaded_file_id: file_id).sort { |a, b| a.name <=> b.name }.pluck(:weight))
   end
 
   def similarity_measure(file_id)
