@@ -4,8 +4,11 @@ h1 File Upload
     <label for='upload_file'>Select File</label>
     = file_field 'upload', 'datafile'
   = submit_tag 'Upload'
-= form_tag({ action: :search_by_tocken }, multipart: true)
+= form_tag({ action: :search_by_token }, multipart: true)
   p
-    <label for='search_by_tocken'>Search</label>
-      = search_field_tag 'tocken'
+    <label for='search_by_token'>Search</label>
+      = search_field_tag 'token'
   = submit_tag 'Search'
+br
+= form_tag({ action: :update_dictionary }, multipart: true)
+  = submit_tag 'Init Dictionary'
